@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Todo } from '@domain/entities/Todo';
+import { Todo } from '@/domain/entities/Todo';
 
 // Store state interface
 interface TodoStoreState {

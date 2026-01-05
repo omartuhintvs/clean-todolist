@@ -1,8 +1,13 @@
-import { ITodoRepository } from '@domain/interfaces/ITodoRepository';
-import { Todo } from '@domain/entities/Todo';
+import { ITodoRepository } from '@/domain/interfaces/ITodoRepository';
+import { Todo } from '@/domain/entities/Todo';
+import { Repository } from '../repository';
 
-export class InMemoryTodoRepository implements ITodoRepository {
+export class InMemoryTodoRepository extends Repository implements ITodoRepository {
   private todos: Map<string, Todo> = new Map();
+
+  constructor() {
+    super();
+  }
 
   async findAll(): Promise<Todo[]> {
     return Array.from(this.todos.values()).sort(

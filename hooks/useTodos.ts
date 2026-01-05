@@ -1,14 +1,27 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { useTodoStore } from '@infrastructure/store/TodoStore';
-import DependencyContainer from '@infrastructure/factories/di/DependencyContainer';
-import { CreateTodoRequest } from '@application/dtos/CreateTodoRequest';
-import { UpdateTodoRequest } from '@application/dtos/UpdateTodoRequest';
+import { useTodoStore } from '@/application/store/TodoStore';
+import { AppDependencyFactory } from '@/infrastructure/factories/app-dependency.factory';
+import { TodoService } from '@/application/services/todo/todo.service';
+import { CreateTodoDTO } from '@/application/services/todo/in-dtos/create-todo.dto';
+import { UpdateTodoDTO } from '@/application/services/todo/in-dtos/update-todo.dto';
+import { Todo } from '@/domain/entities/Todo';
+import { TodoMapper } from '@/application/services/todo/mappers/todo.mapper';
 
+/**
+ * useTodos Hook
+ * Provides todo operations using the BYO-DPP service invoker pattern
+ */
 export function useTodos() {
   const { todos, isLoading, error, setTodos, addTodo, updateTodo, removeTodo, setLoading, setError } = useTodoStore();
-  const container = DependencyContainer.getInstance();
+
+  // Get service via invoker pattern
+  const getTodoService = useCallback((): TodoService => {
+    const factory = AppDependencyFactory.getInstance();
+    const serviceInvoker = factory.getServiceInvoker();
+    return serviceInvoker.invoke<TodoService>('todoService');
+  }, []);
 
   // Load all todos on mount
   useEffect(() => {
@@ -18,22 +31,38 @@ export function useTodos() {
   const loadTodos = useCallback(async () => {
     try {
       setLoading(true);
-      const useCase = container.getAllTodosUseCase();
-      const todos = await useCase.execute();
+      const service = getTodoService();
+      const todoDTOs = await service.getAllTodos();
+
+      // Convert DTOs to domain entities
+      const todos = todoDTOs.map(dto =>
+        new Todo(dto.id, dto.title, dto.description, dto.status, new Date(dto.createdAt), new Date(dto.updatedAt))
+      );
+
       setTodos(todos);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load todos');
     } finally {
       setLoading(false);
     }
-  }, [container, setTodos, setLoading, setError]);
+  }, [getTodoService, setTodos, setLoading, setError]);
 
   const createTodo = useCallback(
-    async (request: CreateTodoRequest) => {
+    async (dto: CreateTodoDTO) => {
       try {
         setLoading(true);
-        const useCase = container.createTodoUseCase();
-        const todo = await useCase.execute(request);
+        const service = getTodoService();
+        const todoDTO = await service.createTodo(dto);
+
+        const todo = new Todo(
+          todoDTO.id,
+          todoDTO.title,
+          todoDTO.description,
+          todoDTO.status,
+          new Date(todoDTO.createdAt),
+          new Date(todoDTO.updatedAt)
+        );
+
         addTodo(todo);
         return todo;
       } catch (err) {
@@ -43,15 +72,25 @@ export function useTodos() {
         setLoading(false);
       }
     },
-    [container, addTodo, setLoading, setError]
+    [getTodoService, addTodo, setLoading, setError]
   );
 
   const updateTodoItem = useCallback(
-    async (request: UpdateTodoRequest) => {
+    async (id: string, dto: UpdateTodoDTO) => {
       try {
         setLoading(true);
-        const useCase = container.updateTodoUseCase();
-        const todo = await useCase.execute(request);
+        const service = getTodoService();
+        const todoDTO = await service.updateTodo(id, dto);
+
+        const todo = new Todo(
+          todoDTO.id,
+          todoDTO.title,
+          todoDTO.description,
+          todoDTO.status,
+          new Date(todoDTO.createdAt),
+          new Date(todoDTO.updatedAt)
+        );
+
         updateTodo(todo);
         return todo;
       } catch (err) {
@@ -61,15 +100,15 @@ export function useTodos() {
         setLoading(false);
       }
     },
-    [container, updateTodo, setLoading, setError]
+    [getTodoService, updateTodo, setLoading, setError]
   );
 
   const deleteTodo = useCallback(
     async (id: string) => {
       try {
         setLoading(true);
-        const useCase = container.deleteTodoUseCase();
-        await useCase.execute(id);
+        const service = getTodoService();
+        await service.deleteTodo(id);
         removeTodo(id);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to delete todo');
@@ -78,15 +117,25 @@ export function useTodos() {
         setLoading(false);
       }
     },
-    [container, removeTodo, setLoading, setError]
+    [getTodoService, removeTodo, setLoading, setError]
   );
 
   const toggleTodoStatus = useCallback(
     async (id: string) => {
       try {
         setLoading(true);
-        const useCase = container.toggleTodoStatusUseCase();
-        const todo = await useCase.execute(id);
+        const service = getTodoService();
+        const todoDTO = await service.toggleTodoStatus(id);
+
+        const todo = new Todo(
+          todoDTO.id,
+          todoDTO.title,
+          todoDTO.description,
+          todoDTO.status,
+          new Date(todoDTO.createdAt),
+          new Date(todoDTO.updatedAt)
+        );
+
         updateTodo(todo);
         return todo;
       } catch (err) {
@@ -96,7 +145,7 @@ export function useTodos() {
         setLoading(false);
       }
     },
-    [container, updateTodo, setLoading, setError]
+    [getTodoService, updateTodo, setLoading, setError]
   );
 
   return {
