@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { useTodoStore } from '@infrastructure/stores/TodoStore';
-import DependencyContainer from '@infrastructure/di/DependencyContainer';
+import { useTodoStore } from '@infrastructure/store/TodoStore';
+import DependencyContainer from '@infrastructure/factories/di/DependencyContainer';
 import { CreateTodoRequest } from '@application/dtos/CreateTodoRequest';
 import { UpdateTodoRequest } from '@application/dtos/UpdateTodoRequest';
 

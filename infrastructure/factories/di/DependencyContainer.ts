@@ -1,5 +1,5 @@
 import { ITodoRepository } from '@domain/interfaces/ITodoRepository';
-import { InMemoryTodoRepository } from '@infrastructure/repositories/InMemoryTodoRepository';
+import { InMemoryTodoRepository } from '@infrastructure/adapters/repositories/InMemoryTodoRepository';
 import { GetAllTodosUseCase } from '@application/use-cases/GetAllTodosUseCase';
 import { CreateTodoUseCase } from '@application/use-cases/CreateTodoUseCase';
 import { UpdateTodoUseCase } from '@application/use-cases/UpdateTodoUseCase';

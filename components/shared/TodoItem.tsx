@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Todo } from '@domain/entities/Todo';
-import { useTodos } from '@presentation/hooks/useTodos';
+import { useTodos } from '@/hooks/useTodos';
 
 interface TodoItemProps {
   todo: Todo;

@@ -1,7 +1,7 @@
 'use client';
 
-import { useTodos } from '@presentation/hooks/useTodos';
-import { TodoItem } from './TodoItem';
+import { useTodos } from '@/hooks/useTodos';
+import { TodoItem } from '@/components/shared/TodoItem';
 
 export function TodoList() {
   const { todos, isLoading, error } = useTodos();

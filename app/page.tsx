@@ -1,5 +1,5 @@
-import { CreateTodoForm } from '@presentation/components/CreateTodoForm';
-import { TodoList } from '@presentation/components/TodoList';
+import { CreateTodoForm } from '@/components/feature/todos/CreateTodoForm';
+import { TodoList } from '@/components/feature/todos/TodoList';
 
 export default function Home() {
   return (

@@ -22,8 +22,7 @@
       "@/*": ["./*"],
       "@domain/*": ["./domain/*"],
       "@application/*": ["./application/*"],
-      "@infrastructure/*": ["./infrastructure/*"],
-      "@presentation/*": ["./presentation/*"]
+      "@infrastructure/*": ["./infrastructure/*"]
     }
   },
   "include": [
