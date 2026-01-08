@@ -2,6 +2,7 @@
 
 A simple todo list application built with **Next.js 15**, **React 19**, **TypeScript**, and **Zustand**, following the **BYO-DPP (Build Your Own Digital Product Passport)** enterprise architecture pattern.
 
+
 ## Architecture Overview
 
 This project demonstrates the BYO-DPP architecture pattern - an enterprise-grade implementation of Clean Architecture with the **Invoker Pattern** for runtime dependency resolution.
