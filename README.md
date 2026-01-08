@@ -1,4 +1,4 @@
-# DPP Todo List - BYO-DPP Architecture Demo
+# DPP Todo List - BYO-DPP Architecture Demo 
 
 A simple todo list application built with **Next.js 15**, **React 19**, **TypeScript**, and **Zustand**, following the **BYO-DPP (Build Your Own Digital Product Passport)** enterprise architecture pattern.
 
